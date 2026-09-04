@@ -1,7 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { PanelLeftClose, PanelLeftOpen, ShieldCheck } from "lucide-react";
+import {
+  PanelLeftClose,
+  PanelLeftOpen,
+  ShieldCheck,
+  UserRound,
+} from "lucide-react";
+import Link from "next/link";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -88,7 +94,13 @@ export function DashboardShell({
           </div>
           <div className="text-muted-foreground flex items-center gap-3 text-sm">
             <ThemeToggle />
-            <span>{userEmail}</span>
+            <Link
+              href="/dashboard/profile"
+              className="hover:text-foreground flex items-center gap-1.5"
+            >
+              <UserRound className="size-4" />
+              {userEmail}
+            </Link>
             {signOutForm}
           </div>
         </header>
