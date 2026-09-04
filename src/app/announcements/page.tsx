@@ -1,6 +1,9 @@
 import { ThemeToggle } from "@/components/theme-toggle";
 import { PublicPostList } from "@/features/posts/components/public-post-list";
 
+// See the matching comment in src/app/notes/page.tsx — same reasoning.
+export const dynamic = "force-dynamic";
+
 export default function PublicAnnouncementsPage() {
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
