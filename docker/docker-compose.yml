@@ -1,0 +1,45 @@
+name: siber
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "3001:3000"
+    env_file:
+      - ../.env.local
+    environment:
+      # Overrides the host-oriented values from .env.local — inside the
+      # compose network Postgres is reachable at the service name `db`,
+      # not `localhost` (that only works when the app runs on the host
+      # and connects to the container via the published port below).
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/siber
+      AUTH_URL: http://localhost:3001
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: siber
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
