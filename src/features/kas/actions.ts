@@ -25,10 +25,12 @@ export async function createKasTransactionAction(
     description: parsed.data.description,
     type: parsed.data.type,
     amount: parsed.data.amount,
+    userId: parsed.data.userId || null,
     createdBy: session.user.id,
   });
 
   revalidatePath("/dashboard/kas");
+  revalidatePath("/dashboard/profile");
 }
 
 export async function updateKasTransactionAction(
@@ -47,10 +49,12 @@ export async function updateKasTransactionAction(
       description: parsed.data.description,
       type: parsed.data.type,
       amount: parsed.data.amount,
+      userId: parsed.data.userId || null,
     })
     .where(eq(kasTransactions.id, id));
 
   revalidatePath("/dashboard/kas");
+  revalidatePath("/dashboard/profile");
 }
 
 export async function deleteKasTransactionAction(
@@ -59,4 +63,5 @@ export async function deleteKasTransactionAction(
   await requirePermission(PERMISSIONS.KAS_DELETE);
   await db.delete(kasTransactions).where(eq(kasTransactions.id, id));
   revalidatePath("/dashboard/kas");
+  revalidatePath("/dashboard/profile");
 }

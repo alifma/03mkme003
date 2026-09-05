@@ -1,0 +1,2 @@
+ALTER TABLE "kas_transactions" ADD COLUMN "user_id" uuid;--> statement-breakpoint
+ALTER TABLE "kas_transactions" ADD CONSTRAINT "kas_transactions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;

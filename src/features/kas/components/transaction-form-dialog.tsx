@@ -20,12 +20,14 @@ interface TransactionFormDialogProps {
   trigger: ReactElement;
   mode: "create" | "edit";
   transaction?: { id: string } & KasTransactionInput;
+  users: { id: string; name: string | null; username: string }[];
 }
 
 export function TransactionFormDialog({
   trigger,
   mode,
   transaction,
+  users,
 }: TransactionFormDialogProps) {
   const [open, setOpen] = useState(false);
 
@@ -56,6 +58,7 @@ export function TransactionFormDialog({
           key={open ? (transaction?.id ?? "new") : "closed"}
           action={handleAction}
           defaultValues={transaction}
+          users={users}
           submitLabel={
             mode === "create" ? "Create transaction" : "Save changes"
           }

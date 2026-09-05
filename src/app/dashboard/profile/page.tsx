@@ -1,14 +1,19 @@
 import { notFound } from "next/navigation";
 import { auth } from "@/features/auth/config";
+import { getUserKasContribution } from "@/features/kas/queries";
 import { updateProfileAction } from "@/features/profile/actions";
 import { ProfileForm } from "@/features/profile/components/profile-form";
 import { getOwnProfile } from "@/features/profile/queries";
+import { formatRupiah } from "@/lib/format";
 
 export default async function ProfilePage() {
   const session = await auth();
   if (!session) notFound();
 
-  const profile = await getOwnProfile(session.user.id);
+  const [profile, kasContribution] = await Promise.all([
+    getOwnProfile(session.user.id),
+    getUserKasContribution(session.user.id),
+  ]);
   if (!profile) notFound();
 
   return (
@@ -27,6 +32,12 @@ export default async function ProfilePage() {
         <div className="flex justify-between">
           <dt className="text-muted-foreground">Roles</dt>
           <dd>{profile.roles.join(", ") || "—"}</dd>
+        </div>
+        <div className="flex justify-between">
+          <dt className="text-muted-foreground">Total iuran kas</dt>
+          <dd className="text-foreground font-semibold">
+            {formatRupiah(kasContribution)}
+          </dd>
         </div>
       </dl>
 

@@ -10,7 +10,12 @@ export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
   userRoles: many(userRoles),
   posts: many(posts),
-  kasTransactions: many(kasTransactions),
+  kasTransactionsFor: many(kasTransactions, {
+    relationName: "kasTransactionUser",
+  }),
+  kasTransactionsCreated: many(kasTransactions, {
+    relationName: "kasTransactionCreatedBy",
+  }),
 }));
 
 export const rolesRelations = relations(roles, ({ many }) => ({
@@ -48,9 +53,15 @@ export const postsRelations = relations(posts, ({ one }) => ({
 export const kasTransactionsRelations = relations(
   kasTransactions,
   ({ one }) => ({
+    user: one(users, {
+      fields: [kasTransactions.userId],
+      references: [users.id],
+      relationName: "kasTransactionUser",
+    }),
     createdByUser: one(users, {
       fields: [kasTransactions.createdBy],
       references: [users.id],
+      relationName: "kasTransactionCreatedBy",
     }),
   }),
 );

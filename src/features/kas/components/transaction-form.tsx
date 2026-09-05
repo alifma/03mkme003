@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import type { KasTransactionInput } from "../schema";
 
 // A plain z.number() here (not the server schema's z.coerce.number()) keeps
@@ -18,21 +19,24 @@ import type { KasTransactionInput } from "../schema";
 // the real (coercing) kasTransactionSchema in ../schema.ts regardless.
 const formSchema = z.object({
   date: z.string().min(1, "Date is required"),
-  description: z.string().min(1, "Description is required").max(300),
+  description: z.string().min(1, "Description is required").max(1000),
   type: z.enum(["in", "out"]),
   amount: z.number().int().positive("Amount must be greater than 0"),
+  userId: z.string().optional(),
 });
 
 interface TransactionFormProps {
   action: (input: KasTransactionInput) => Promise<{ error?: string } | void>;
   defaultValues?: Partial<KasTransactionInput>;
   submitLabel?: string;
+  users: { id: string; name: string | null; username: string }[];
 }
 
 export function TransactionForm({
   action,
   defaultValues,
   submitLabel = "Save",
+  users,
 }: TransactionFormProps) {
   const [serverError, setServerError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -46,6 +50,7 @@ export function TransactionForm({
       description: "",
       type: "in",
       amount: 0,
+      userId: "",
       ...defaultValues,
     },
   });
@@ -75,8 +80,26 @@ export function TransactionForm({
       </div>
 
       <div className="space-y-1.5">
+        <Label htmlFor="userId">Person</Label>
+        {/* Plain native <select> — same reasoning as "Type" below. Empty
+            option means "no specific person" (general expense). */}
+        <select
+          id="userId"
+          className="border-input focus-visible:border-ring focus-visible:ring-ring/50 dark:bg-input/30 w-full rounded-lg border bg-transparent px-2.5 py-2 text-sm outline-none focus-visible:ring-3"
+          {...form.register("userId")}
+        >
+          <option value="">— No specific person —</option>
+          {users.map((user) => (
+            <option key={user.id} value={user.id}>
+              {user.name ?? user.username}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="space-y-1.5">
         <Label htmlFor="description">Description</Label>
-        <Input id="description" {...form.register("description")} />
+        <Textarea id="description" rows={3} {...form.register("description")} />
         {form.formState.errors.description && (
           <p className="text-destructive text-sm">
             {form.formState.errors.description.message}

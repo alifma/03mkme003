@@ -22,6 +22,13 @@
       "when": 1788555049879,
       "tag": "0002_nostalgic_the_hood",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1788559510287,
+      "tag": "0003_noisy_lethal_legion",
+      "breakpoints": true
     }
   ]
 }

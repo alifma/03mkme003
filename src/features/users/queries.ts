@@ -25,3 +25,11 @@ export async function listUsers() {
     roleIds: row.userRoles.map((ur) => ur.role.id),
   }));
 }
+
+/** Minimal shape for the "person" dropdown on the kas transaction form. */
+export async function listUsersForSelect() {
+  return db.query.users.findMany({
+    columns: { id: true, name: true, username: true },
+    orderBy: (u, { asc }) => [asc(u.name)],
+  });
+}
