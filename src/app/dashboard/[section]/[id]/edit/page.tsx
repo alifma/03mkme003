@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { env } from "@/config/env";
 import { auth } from "@/features/auth/config";
 import { can } from "@/features/rbac/can";
 import { updatePostAction } from "@/features/posts/actions";
@@ -36,6 +37,7 @@ export default async function EditPostPage({
             content: post.content,
           }}
           submitLabel="Save changes"
+          maxUploadMb={env.MAX_UPLOAD_MB}
         />
       </div>
     </div>

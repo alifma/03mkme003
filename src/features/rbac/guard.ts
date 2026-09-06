@@ -51,3 +51,27 @@ export async function requirePermission(
   assertPermission(session, permission);
   return session;
 }
+
+/**
+ * Route Handler helper: turns a thrown `UnauthenticatedError` / `ForbiddenError`
+ * into a 401 / 403 JSON response. Returns `null` for anything else so the
+ * caller can rethrow (Server Actions don't need this — they just throw).
+ *
+ * @example
+ * try {
+ *   await requirePermission(PERMISSIONS.FILES_UPLOAD);
+ * } catch (error) {
+ *   const res = guardErrorResponse(error);
+ *   if (res) return res;
+ *   throw error;
+ * }
+ */
+export function guardErrorResponse(error: unknown): Response | null {
+  if (error instanceof UnauthenticatedError) {
+    return Response.json({ error: error.message }, { status: 401 });
+  }
+  if (error instanceof ForbiddenError) {
+    return Response.json({ error: error.message }, { status: 403 });
+  }
+  return null;
+}

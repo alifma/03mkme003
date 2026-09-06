@@ -16,6 +16,10 @@ services:
       # and connects to the container via the published port below).
       DATABASE_URL: postgresql://postgres:postgres@db:5432/siber
       AUTH_URL: http://localhost:3001
+      # Uploaded files land on the `uploads` volume below, not in the image.
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - uploads:/app/uploads
     depends_on:
       db:
         condition: service_healthy
@@ -43,3 +47,4 @@ services:
 
 volumes:
   pgdata:
+  uploads:

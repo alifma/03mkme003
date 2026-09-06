@@ -1,4 +1,5 @@
 import { relations } from "drizzle-orm";
+import { attachments } from "./attachments";
 import { kasTransactions } from "./kas";
 import { permissions, rolePermissions } from "./permissions";
 import { posts } from "./posts";
@@ -15,6 +16,14 @@ export const usersRelations = relations(users, ({ many }) => ({
   }),
   kasTransactionsCreated: many(kasTransactions, {
     relationName: "kasTransactionCreatedBy",
+  }),
+  attachments: many(attachments),
+}));
+
+export const attachmentsRelations = relations(attachments, ({ one }) => ({
+  uploadedByUser: one(users, {
+    fields: [attachments.uploadedBy],
+    references: [users.id],
   }),
 }));
 

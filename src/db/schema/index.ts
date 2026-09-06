@@ -1,3 +1,4 @@
+export * from "./attachments";
 export * from "./kas";
 export * from "./permissions";
 export * from "./posts";

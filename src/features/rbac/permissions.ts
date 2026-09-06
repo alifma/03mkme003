@@ -34,6 +34,10 @@ export const PERMISSIONS = {
   KAS_READ: "kas:read",
   KAS_UPDATE: "kas:update",
   KAS_DELETE: "kas:delete",
+
+  FILES_READ: "files:read",
+  FILES_UPLOAD: "files:upload",
+  FILES_DELETE: "files:delete",
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -90,6 +94,14 @@ export const PERMISSION_GROUPS: {
       PERMISSIONS.KAS_READ,
       PERMISSIONS.KAS_UPDATE,
       PERMISSIONS.KAS_DELETE,
+    ],
+  },
+  {
+    resource: "Files",
+    permissions: [
+      PERMISSIONS.FILES_READ,
+      PERMISSIONS.FILES_UPLOAD,
+      PERMISSIONS.FILES_DELETE,
     ],
   },
 ];

@@ -2,23 +2,25 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { MarkdownEditor } from "@/features/files/components/markdown-editor";
 import { postSchema, type PostInput } from "../schema";
 
 interface PostFormProps {
   action: (input: PostInput) => Promise<{ error?: string } | void>;
   defaultValues?: Partial<PostInput>;
   submitLabel?: string;
+  maxUploadMb: number;
 }
 
 export function PostForm({
   action,
   defaultValues,
   submitLabel = "Save",
+  maxUploadMb,
 }: PostFormProps) {
   const [serverError, setServerError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -59,11 +61,18 @@ export function PostForm({
 
       <div className="space-y-1.5">
         <Label htmlFor="content">Content (Markdown)</Label>
-        <Textarea
-          id="content"
-          rows={16}
-          className="font-mono"
-          {...form.register("content")}
+        <Controller
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <MarkdownEditor
+              id="content"
+              value={field.value ?? ""}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              maxUploadMb={maxUploadMb}
+            />
+          )}
         />
         {form.formState.errors.content && (
           <p className="text-destructive text-sm">

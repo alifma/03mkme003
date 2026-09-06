@@ -34,6 +34,9 @@ async function main() {
     [PERMISSIONS.KAS_READ]: "View kas transactions",
     [PERMISSIONS.KAS_UPDATE]: "Edit kas transactions",
     [PERMISSIONS.KAS_DELETE]: "Delete kas transactions",
+    [PERMISSIONS.FILES_READ]: "View and download uploaded files",
+    [PERMISSIONS.FILES_UPLOAD]: "Upload files",
+    [PERMISSIONS.FILES_DELETE]: "Delete uploaded files",
   };
 
   // Roles are just rows in the `roles` table — there's no fixed set of them;
@@ -50,6 +53,7 @@ async function main() {
       PERMISSIONS.ANNOUNCEMENTS_READ,
       PERMISSIONS.KAS_READ,
       PERMISSIONS.USERS_READ,
+      PERMISSIONS.FILES_READ,
     ],
   };
 

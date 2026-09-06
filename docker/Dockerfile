@@ -37,6 +37,11 @@ ENV PORT=3000
 RUN addgroup --system --gid 1001 nodejs \
   && adduser --system --uid 1001 nextjs
 
+# Pre-create the uploads dir owned by the runtime user. A named volume
+# mounted here (see docker-compose.yml) inherits this ownership on first
+# use, so `next` (uid 1001) can write uploads into it.
+RUN mkdir -p /app/uploads && chown nextjs:nodejs /app/uploads
+
 # .next/standalone doesn't include public/ or .next/static — copied in
 # manually per Next.js's documented standalone output convention.
 COPY --from=builder /app/public ./public

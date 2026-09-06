@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { env } from "@/config/env";
 import { auth } from "@/features/auth/config";
 import { can } from "@/features/rbac/can";
 import { createPostAction } from "@/features/posts/actions";
@@ -24,7 +25,10 @@ export default async function NewPostPage({
         New {type === "note" ? "note" : "announcement"}
       </h1>
       <div className="mt-4">
-        <PostForm action={createPostAction.bind(null, type)} />
+        <PostForm
+          action={createPostAction.bind(null, type)}
+          maxUploadMb={env.MAX_UPLOAD_MB}
+        />
       </div>
     </div>
   );

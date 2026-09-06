@@ -24,6 +24,12 @@ const envSchema = z.object({
     ),
   AUTH_URL: z.url().optional(),
 
+  // File uploads (see src/features/files/). UPLOAD_DIR holds the raw bytes;
+  // it must be a persisted path in production (a mounted Docker volume — see
+  // docker/docker-compose.yml), not a directory inside the image.
+  UPLOAD_DIR: z.string().default("./uploads"),
+  MAX_UPLOAD_MB: z.coerce.number().int().positive().default(50),
+
   // Public (exposed to the browser — must be NEXT_PUBLIC_ prefixed)
   NEXT_PUBLIC_APP_URL: z.url().default("http://localhost:3000"),
 });

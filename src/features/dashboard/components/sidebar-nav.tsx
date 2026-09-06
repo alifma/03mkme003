@@ -2,6 +2,7 @@
 
 import { cn } from "cn";
 import {
+  FolderOpen,
   LayoutDashboard,
   Megaphone,
   NotebookText,
@@ -21,6 +22,7 @@ const ICONS: Record<NavIcon, LucideIcon> = {
   notes: NotebookText,
   announcements: Megaphone,
   kas: Wallet,
+  files: FolderOpen,
 };
 
 export function SidebarNav({

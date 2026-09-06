@@ -6,7 +6,7 @@ import { PERMISSIONS, type Permission } from "@/features/rbac/permissions";
 // references aren't serializable across that boundary; the client side
 // resolves the key to an actual icon via ICONS in sidebar-nav.tsx.
 export type NavIcon =
-  "dashboard" | "users" | "roles" | "notes" | "announcements" | "kas";
+  "dashboard" | "users" | "roles" | "notes" | "announcements" | "kas" | "files";
 
 export interface NavItem {
   label: string;
@@ -45,6 +45,12 @@ export const NAV_ITEMS: NavItem[] = [
     href: "/dashboard/kas",
     icon: "kas",
     permission: PERMISSIONS.KAS_READ,
+  },
+  {
+    label: "Files",
+    href: "/dashboard/files",
+    icon: "files",
+    permission: PERMISSIONS.FILES_READ,
   },
   {
     label: "Users",
