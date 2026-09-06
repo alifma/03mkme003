@@ -2,23 +2,33 @@ import { describe, expect, it } from "vitest";
 import { credentialsSchema, loginSchema } from "@/features/auth/schema";
 
 describe("credentialsSchema", () => {
-  it("accepts a valid email and non-empty password", () => {
+  it("accepts a non-empty identifier and password", () => {
     expect(
-      credentialsSchema.safeParse({ email: "a@b.com", password: "secret" })
+      credentialsSchema.safeParse({ identifier: "alice", password: "secret" })
         .success,
     ).toBe(true);
   });
 
-  it("rejects an invalid email", () => {
+  it("accepts an email as the identifier", () => {
     expect(
-      credentialsSchema.safeParse({ email: "not-an-email", password: "secret" })
+      credentialsSchema.safeParse({
+        identifier: "a@b.com",
+        password: "secret",
+      }).success,
+    ).toBe(true);
+  });
+
+  it("rejects an empty identifier", () => {
+    expect(
+      credentialsSchema.safeParse({ identifier: "", password: "secret" })
         .success,
     ).toBe(false);
   });
 
   it("rejects an empty password", () => {
     expect(
-      credentialsSchema.safeParse({ email: "a@b.com", password: "" }).success,
+      credentialsSchema.safeParse({ identifier: "alice", password: "" })
+        .success,
     ).toBe(false);
   });
 });
@@ -27,7 +37,7 @@ describe("loginSchema", () => {
   it("accepts an optional callbackUrl", () => {
     expect(
       loginSchema.safeParse({
-        email: "a@b.com",
+        identifier: "alice",
         password: "secret",
         callbackUrl: "/dashboard",
       }).success,
@@ -36,7 +46,8 @@ describe("loginSchema", () => {
 
   it("works without a callbackUrl", () => {
     expect(
-      loginSchema.safeParse({ email: "a@b.com", password: "secret" }).success,
+      loginSchema.safeParse({ identifier: "alice", password: "secret" })
+        .success,
     ).toBe(true);
   });
 });
