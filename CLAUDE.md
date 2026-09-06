@@ -130,6 +130,13 @@ The notes/announcement editor (`MarkdownEditor`, wired into `PostForm` via RHF
 files are login-gated, embedded images only render for signed-in viewers — not on the
 public `/notes` list.
 
+Attachments are **not** linked to posts by a foreign key — a post only references a
+file by its `/api/files/<id>` URL inside `content`. So an abandoned draft, a removed
+`![](…)`, or a deleted post all leave the file orphaned (no error, just junk on the
+volume). `pnpm files:gc` (`src/db/gc-files.ts`) sweeps attachments older than 24h whose
+id appears in no post content or kas description — dry-run by default, `--delete` to
+act.
+
 ### Env validation
 
 `src/config/env.ts` parses `process.env` with Zod at module load and throws on missing
